@@ -1,5 +1,9 @@
 http://laurapatti-blog.herokuapp.com/
 
+http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog
+
+
+
 We are going to be building a blog this week. Today is the first part, get use to setting up Models, Collections and Views. Also, this is a good time to start using Handlebars as your template engine.
 
 I've attached a mockup or what you saw on the board.
