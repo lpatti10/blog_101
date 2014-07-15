@@ -163,4 +163,50 @@ var.on ('change', ...)
 var.on ('boom', ...)
 	(run) var.trigger.boom
 
+//TUESDAY.........................................................
+
+//Templating = HTML blueprint
+var underscore_template = "<%= title %>";
+var handlebars_template = "{{ title }}";
+
+//Compiling
+var underscore_template = _.template(underscore_template);
+var handlebars_template = $('post_template').html(); //Does same as line above, but using template
+var handlebars_template = Handlebars.compile(handlebars_template);
+
+//Rendering
+var rendered = underscore_compile({ title: 'Moby' });
+var rendered = handlebars_compile({ title: 'Moby' });
+var rendered = Handlebars.templates.post({ title: 'Moby' }); //Alt way of doing things other than compile abv.
+
+//Injecting
+$('body').html(rendered);
+$('body').prepend(rendered);
+
+
+//Handlebars Command Line
+var rendered = Handlebars.templates.post({ title: 'Moby' }) //Don't have to do this...?
+handlebars book.handlebars -f templates.js //writes out/compiles to templates.js; this only requires runtime file as source link (vs. min.js). No longer processing template on server.
+
+//book.handlebars
+<h1>{{ title }}</h1>
+
+
+{ books: this.collection.toJSON() }
+
+{{ #each books }}
+	{{ title }}
+{{ /each }}
+
+
+//in browser compile vs. in command line
+
+
+
+
+
+
+
+
+
 

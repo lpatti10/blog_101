@@ -24,7 +24,7 @@
   <body>
 
     <div class="hero-unit">
-        <form>
+        <form id="form">
             <header id="header">
              
                 <h1>myBlog</h1>
@@ -34,7 +34,7 @@
                 </div>
 
 
-                <p>Published:<!--  <script type="text/javascript">$.now()</script> --></p>
+                <p>Publish Date:<!--  <script type="text/javascript">$.now()</script> --></p>
 
                 <input id="title" placeholder="Blog post title..." autofocus="">
                 
@@ -49,7 +49,7 @@
 
                 <input id="tags" placeholder="Meta tags..." autofocus="">
 
-                <button>submit post</button> 
+                <button class="submitBtn">submit post</button> 
             
 
 
@@ -62,18 +62,18 @@
     </div>
 
 
-    <script type="text/x-handlebars-template" id="feed_template">
-    // The each block helper: You can iterate over a list using the built-in each helper. Inside the block, you can use this to reference the element being iterated over.
-        {{#each post}}
-            <li>
-                <h2>{{{ title }}}</h2>
-                <p>{{{ content }}}</p>
-                <small>{{{ author }}}</small>
-                <small>{{{ date }}}</small>
-                <a href="#">{{{ tags }}}</a>
-            </li>
-        {{/each}}
-    </script>
+    <!--<script type="text/x-handlebars-template" id="feed_template">
+    // // The each block helper: You can iterate over a list using the built-in each helper. Inside the block, you can use this to reference the element being iterated over.
+    //     {{#each post}}
+    //         <li>
+    //             <h2>{{{ title }}}</h2>
+    //             <p>{{{ content }}}</p>
+    //             <small>{{{ author }}}</small>
+    //             <small>{{{ date }}}</small>
+    //             <a href="#">{{{ tags }}}</a>
+    //         </li>
+    //     {{/each}}
+    // </script>-->
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
@@ -89,7 +89,7 @@
         <script src="scripts/collections/post_collection.js"></script>
         <script src="scripts/views/list_view.js"></script>
         <script src="scripts/main.js"></script>
-        <!--<script src="scripts/templates.js"></script>-->
+        <script src="scripts/templates.js"></script>
         <!-- endbuild -->
 </body>
 </html>
