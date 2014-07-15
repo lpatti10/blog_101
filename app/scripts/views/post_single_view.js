@@ -1,3 +1,5 @@
+//Class sample code
+
 Var PostSingle = Backbone.View.extend ({
 	el: '#blogWrap',
 
@@ -15,5 +17,19 @@ Var PostSingle = Backbone.View.extend ({
 		return this;
 	}
 
+});
 
+//Gist sample code "not a fully fleshed out Router/View... but rather just an explanation of how data can be passed."
+
+var PostSingle = Backbone.View.extend ({
+ 
+  initialize: function (attrs) {
+    this.options = attrs;
+  },
+ 
+  render: function (options) {
+    // I now have access to `this.options.postid`
+    // this.render ...Michael mentioned
+  }
+ 
 });
