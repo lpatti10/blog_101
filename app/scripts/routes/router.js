@@ -5,7 +5,7 @@
 
 	var PostRouter = Backbone.Router.extend({
 		routes: {
-			' ': 'home', //need a home button element to call here
+			' ': 'home',
 			"posts/:id": 'single_post'
 		},
 
@@ -19,10 +19,15 @@
 		}
 	});
 
-//Fetch data and initiate router and start history watch
+//FETCH data and initiate router and start history watch
+	all_posts.fetch().done( function (){
+
+		WINDOW.APPR = NEW POSTROUTE();
+		BACKBONE.HISTORY.START();
+	})
 
 	//Create an instance
-	var post_router = new PostRouter;
+	// var post_router = new PostRouter;
 
 	//Start Backbone History ...almost like a "watch" function
 	Backbone.history.start();

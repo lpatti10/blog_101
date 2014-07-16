@@ -2,18 +2,12 @@ all_posts.fetch().done( function (){
   new ListView({ collection: all_posts });
 });
 
+//THIS IS WHERE TIM PUT HIS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 
-
-
-
-
-
-
-
-// $('header a').on('click', function (e) {
-//  e.preventDefault();
-//  window.appr.navigate("", {trigger: true});
-// });
+$('header a').on('click', function (e) {
+ e.preventDefault();
+ window.appr.navigate("", {trigger: true});
+});
 
 
 

@@ -78,7 +78,7 @@ var ListView = Backbone.View.extend({
      "click .submitBtn": "submitForm",
      // "submit #formID": "submitForm"
 
-     "click a.post_title": "seeFullpost"
+     "click a.post_title": "seeFullpost" //h1.title a
   },
 
   initialize: function () {
@@ -92,6 +92,7 @@ var ListView = Backbone.View.extend({
     //Pass data to template
     var rendered = Handlebars.templates.post({post: this.collection.toJSON()});
     this.$el.find(".post_collection ul").html(rendered);
+    this.$el.find("CHANGE:post_entry_form:CHANGE").show();
     return this;
   },
 
@@ -99,7 +100,7 @@ var ListView = Backbone.View.extend({
     event.preventDefault();
     console.log("I'm clicked");
 
-    // Grab all form data and defing variables for each to use below and create new instance of your model 
+    // Grab all form data and defining variables for each to use below and create new instance of your model 
     var temp_post = new Post({
       title:  $('#title').val(),
       content: $('#content').val(),
@@ -109,11 +110,15 @@ var ListView = Backbone.View.extend({
       status: 'Published',
       date: new Date().toJSON().slice(0,10)
     });
-  
-  // seeFullpost: function (event){
-    //Need to write function here???????????????????
+  },
 
-  // },
+  //Prevents default action like going to URL in this case
+  // Navigating using backbone...Defined in main.js = "appr" stands for "app router" = global variable in js by attaching to window "window.appr"
+  //trigger actual event
+
+  seeFullpost: function (event){ 
+    event.preventDefault();
+    window.appr.navigate($(event.target).attr('id'), { trigger: true});
 
     // Save your model; this will save it to the database and re-render the page
     all_posts.add(temp_post).save();
@@ -121,7 +126,6 @@ var ListView = Backbone.View.extend({
     // this.$el.find( '#formID' ).trigger( 'reset' );
 
   }
-
 
 });
 
@@ -139,18 +143,12 @@ all_posts.fetch().done( function (){
   new ListView({ collection: all_posts });
 });
 
+//THIS IS WHERE TIM PUT HIS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 
-
-
-
-
-
-
-
-// $('header a').on('click', function (e) {
-//  e.preventDefault();
-//  window.appr.navigate("", {trigger: true});
-// });
+$('header a').on('click', function (e) {
+ e.preventDefault();
+ window.appr.navigate("", {trigger: true});
+});
 
 
 
