@@ -1,7 +1,12 @@
 //Class sample code
+var SingleView = Backbone.View.extend ({
+	
+	//Parent element created below hero in index.html
+	el: '.fullpost-unit',
 
-Var PostSingle = Backbone.View.extend ({
-	el: '#blogWrap',
+	events: {
+		//may need a back/home/close event to return?????
+	},
 
 	initialize: function (attrs) {
 		this.options = attrs;
@@ -10,26 +15,11 @@ Var PostSingle = Backbone.View.extend ({
 
 	render: function (options) {
 		var p = this.collection.findWhere({_id: this.options.postid });
-		var template = Handlebars.compile($('#post_template_single').html());
-		var rendered = template(p.toJSON());
-		this.$el.find('.post_entry_form').hide();
-		this.$el.find('#postList').html(rendered);
+		// var template = Handlebars.compile($('#post_template_single').html());
+		// var rendered = template(p.toJSON());
+    var rendered = Handlebars.templates.post({post: this.collection.toJSON()});
+		this.$el.find(".fullpost-unit ul").html(rendered);
 		return this;
 	}
 
-});
-
-//Gist sample code "not a fully fleshed out Router/View... but rather just an explanation of how data can be passed."
-
-var PostSingle = Backbone.View.extend ({
- 
-  initialize: function (attrs) {
-    this.options = attrs;
-  },
- 
-  render: function (options) {
-    // I now have access to `this.options.postid`
-    // this.render ...Michael mentioned
-  }
- 
 });

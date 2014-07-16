@@ -29,22 +29,65 @@ var Feed = Backbone.Collection.extend({
 });
 
 var all_posts = new Feed();
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['post'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n  <li>\n    <a href=\"#\" class=\"post_title\">";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n    <p>";
+  if (helper = helpers.content) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.content); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n    <small>";
+  if (helper = helpers.author) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.author); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n    <small>";
+  if (helper = helpers.date) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.date); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</small>\n    <a href=\"#\">";
+  if (helper = helpers.tags) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.tags); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n  </li>\n";
+  return buffer;
+  }
+
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.post), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  });
+})();
+//Set-up of listed blog posts as feed
 var ListView = Backbone.View.extend({
 
-  // Parent element only(vs. jQ) where all events are happening.
+  // Parent element only (vs. jQ) where all events are happening. 
   el: '.hero-unit',
 
+  events: {
+     "click .submitBtn": "submitForm",
+     // "submit #formID": "submitForm"
+
+     "click a.post_title": "seeFullpost"
+  },
+
   initialize: function () {
-    this.render(); //runs render function below
+    this.render();
     this.collection.on('change', this.render, this);
     this.collection.on('destroy', this.render, this);
   },
 
-  events: {
-     "submit #formID": "submitForm"
-  },
-
-//Render page data
+  //Render page data
   render: function(){
     //Pass data to template
     var rendered = Handlebars.templates.post({post: this.collection.toJSON()});
@@ -52,41 +95,36 @@ var ListView = Backbone.View.extend({
     return this;
   },
 
-
   submitForm: function (event){
-		event.preventDefault();
+    event.preventDefault();
     console.log("I'm clicked");
-    
 
-	// Grab all form data 
-    var temp_post,
-    title = $('#title').val(),
-    content = $('#content').val(),
-    author = $('#author').val(),
-    tags = $('#tags').val(),
-
-	// Create new instance of your model (using variables above)
-    temp_post = new Post({
-      title: title,
-      author: author,
-      content: content,
-      tags: tags.replace(/\s+/g, '').split(','),
+    // Grab all form data and defing variables for each to use below and create new instance of your model 
+    var temp_post = new Post({
+      title:  $('#title').val(),
+      content: $('#content').val(),
+      author:  $('#author').val(),
+      tags: $('#tags').val(),
+      //tags: tags.replace(/\s+/g, '').split(','),
       status: 'Published',
       date: new Date().toJSON().slice(0,10)
     });
-
-
-	// Add new model instance to your collection
-	// Save your model - this will save it to the database && re-render the page
-
-  },
-//on 
-  all_posts.add(temp_post).save();
-
-  this.$el.find( '#formID' ).trigger('reset')
-
   
+  // seeFullpost: function (event){
+    //Need to write function here???????????????????
+
+  // },
+
+    // Save your model; this will save it to the database and re-render the page
+    all_posts.add(temp_post).save();
+
+    // this.$el.find( '#formID' ).trigger( 'reset' );
+
+  }
+
+
 });
+
 
 
 
@@ -98,35 +136,34 @@ var ListView = Backbone.View.extend({
 
 
 all_posts.fetch().done( function (){
-  new PostView({ collection: all_posts });
+  new ListView({ collection: all_posts });
 });
 
-$('header a').on('click', function (e) {
- e.preventDefault();
- window.appr.navigate("", {trigger: true});
-});
 
-// all_posts.fetch().done(function () {
-// 	new ListView( { collection: all_posts } );
+
+
+
+
+
+
+
+// $('header a').on('click', function (e) {
+//  e.preventDefault();
+//  window.appr.navigate("", {trigger: true});
 // });
 
 
+
+
+
+
+
+
 // Get and Compile My Template
-var template = Handlebars.compile($('#feed_template').html());
+// var template = Handlebars.compile($('#feed_template').html());
  
 // Pass the `data` to my compiled template to render it
-var rendered = template(data);
+// var rendered = template(data);
  
 // Choose a spot on my page and dump my rendered template HTML into it.
-$('.post_collection').html(rendered);
-(function() {
-  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
-templates['post'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "";
-
-
-  return buffer;
-  });
-})();
+// $('.post_collection').html(rendered);

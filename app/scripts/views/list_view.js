@@ -1,12 +1,14 @@
 //Set-up of listed blog posts as feed
 var ListView = Backbone.View.extend({
 
-  // Parent element only(vs. jQ) where all events are happening. 
+  // Parent element only (vs. jQ) where all events are happening. 
   el: '.hero-unit',
 
   events: {
-     "click .submitBtn": "submitForm"
+     "click .submitBtn": "submitForm",
      // "submit #formID": "submitForm"
+
+     "click a.post_title": "seeFullpost"
   },
 
   initialize: function () {
@@ -38,6 +40,11 @@ var ListView = Backbone.View.extend({
       date: new Date().toJSON().slice(0,10)
     });
   
+  // seeFullpost: function (event){
+    //Need to write function here???????????????????
+
+  // },
+
     // Save your model; this will save it to the database and re-render the page
     all_posts.add(temp_post).save();
 

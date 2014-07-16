@@ -1,33 +1,21 @@
-//Gist sample code. Passing Data from Router to View
 
-var PostRoute = Backbone.Router.extend({
- 
-  routes: {
-    'posts/:id' : 'single_post'
-  },
- 
-  single_post: function (id) {
-    new PostSingle({ postid: id });
-  }
- 
-});
 
 
 //Class sample code:
 
 	var PostRouter = Backbone.Router.extend({
 		routes: {
-			'': 'home',
+			' ': 'home', //need a home button element to call here
 			"posts/:id": 'single_post'
 		},
 
 		home: function () {
-			new PostView({ collection: all_posts });
+			new ListView({ collection: all_posts });
 		},
 
 		single_post: function (id) {
 			alert("Loading Post " + id);
-			new PostSingle({ collection: all_posts, postid: id});
+			new SingleView({ collection: all_posts, postid: id});
 		}
 	});
 
@@ -38,3 +26,19 @@ var PostRoute = Backbone.Router.extend({
 
 	//Start Backbone History ...almost like a "watch" function
 	Backbone.history.start();
+
+
+
+// 	//Gist sample code. Passing Data from Router to View
+
+// var PostRoute = Backbone.Router.extend({
+ 
+//   routes: {
+//     'posts/:id' : 'single_post'
+//   },
+ 
+//   single_post: function (id) {
+//     new PostSingle({ postid: id });
+//   }
+ 
+// });
