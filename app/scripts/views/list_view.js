@@ -14,12 +14,14 @@ var ListView = Backbone.View.extend({
   initialize: function () {
     this.render();
     this.collection.on('change', this.render, this);
-    this.collection.on('destroy', this.render, this);
+    // this.collection.on('destroy', this.render, this);
   },
 
   //Render page data
   render: function(){
     //Pass data to template
+    THIS.COLLECTION.SORT();
+    VAR TEMPLATE = HANDLEBARS.COMPILE......DO NOT NEED???
     var rendered = Handlebars.templates.post({post: this.collection.toJSON()});
     this.$el.find(".post_collection ul").html(rendered);
     this.$el.find(".fullpost-unit ul").show();
@@ -40,6 +42,14 @@ var ListView = Backbone.View.extend({
       status: 'Published',
       date: new Date().toJSON().slice(0,10)
     });
+
+      // Save your model; this will save it to the database and re-render the page
+      all_posts.add(temp_post).save();
+
+      //clears form upon submit
+      this.$el.find( '#formID' ).trigger( 'reset' );
+      $(THIS).TRIGGER('RESET');
+
   },
 
   //Prevents default action like going to URL in this case
@@ -47,14 +57,11 @@ var ListView = Backbone.View.extend({
   //trigger actual event
 
   seeFullpost: function (event){ 
-    console.log("Promting full post view");
+    console.log("Prompting full post view");
     event.preventDefault();
+    VAR DRINK_ID = $(EVENT.TARGET).ATTR('ID');
+    WINDOW.WHISKEY_ROUTER.NAVIGATE......
     window.appr.navigate($(event.target).attr('href'), { trigger: true});
-
-    // Save your model; this will save it to the database and re-render the page
-    all_posts.add(temp_post).save();
-
-    // this.$el.find( '#formID' ).trigger( 'reset' );
 
   }
 

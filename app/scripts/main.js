@@ -5,13 +5,20 @@ all_posts.fetch().done( function (){
 });
 
 
-$('header a').on('click', function (e) {
- e.preventDefault();
- window.appr.navigate("", {trigger: true});
-});
+//FETCH data and initiate router and start history watch
+	all_posts.fetch().done( function (){
+
+		window.appr = new PostRouter();
+		Backbone.history.start();
+	})
+
+// $('.post_title').on('click', function (e) {
+//  e.preventDefault();
+//  window.appr.navigate("", {trigger: true});
+// });
 
 
-//THIS IS WHERE TIM PUT HIS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
+//THIS IS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 
 // $('header a').on('click', function (e) {
 //  e.preventDefault();
