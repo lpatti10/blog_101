@@ -1,9 +1,12 @@
-{{#each post}}
+{{#each fullpost}}
   <li>
     <a href="{{ _id }}" id="{{ _id }}" class="post_title">{{title}}</a>
     <p>{{content}}</p>
     <small>{{author}}</small>
     <small>{{date}}</small>
+    <a href="#">{{{ tags }}}</a>
+
+    {{!--
     <p> Tags:
 	    {{each tags}}
 	    	{{#if @last}}
@@ -13,6 +16,9 @@
 	  		{{/if}}
 			{{/each}}
 		</p>
+		--}}
+
+
   </li>
 {{/each}}
 

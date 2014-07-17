@@ -22,7 +22,7 @@ var ListView = Backbone.View.extend({
     //Pass data to template
     var rendered = Handlebars.templates.post({post: this.collection.toJSON()});
     this.$el.find(".post_collection ul").html(rendered);
-    this.$el.find("CHANGE:post_entry_form:CHANGE").show();
+    this.$el.find(".fullpost-unit ul").show();
     return this;
   },
 
@@ -47,8 +47,9 @@ var ListView = Backbone.View.extend({
   //trigger actual event
 
   seeFullpost: function (event){ 
+    console.log("Promting full post view");
     event.preventDefault();
-    window.appr.navigate($(event.target).attr('id'), { trigger: true});
+    window.appr.navigate($(event.target).attr('href'), { trigger: true});
 
     // Save your model; this will save it to the database and re-render the page
     all_posts.add(temp_post).save();

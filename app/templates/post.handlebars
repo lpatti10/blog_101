@@ -1,6 +1,7 @@
  {{#each post}}
 	<li>
-		<h2>{{{ title }}}</h2>
+		<a href="{{ _id }}" id="{{ _id }}" class="post_title">{{title}}</a>
+		{{! <h2>{{{ title }}}</h2> }}
 		<p>{{{ content }}}</p>
 		<small>{{{ author }}}</small>
 		<small>{{{ date }}}</small>

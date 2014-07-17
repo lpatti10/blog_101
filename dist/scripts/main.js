@@ -1,5 +1,8 @@
 var Post = Backbone.Model.extend({
-	defaults: {
+	
+  idAttribute: "_id" ,
+
+  defaults: {
     title: "", 
     content: "", 
     date: "", 
@@ -9,8 +12,6 @@ var Post = Backbone.Model.extend({
 
   },
   
-  idattribute: "_id" ,
-
   initialize: function (){
   	console.log("A new post has been submitted!");
   }
@@ -18,6 +19,17 @@ var Post = Backbone.Model.extend({
 });
 
 
+// var Whiskey = Backbone.Model.extend({
+
+//   idAttribute: '_id',
+
+//   defaults: {
+//     name: '',
+//     description: '',
+//     tried: false
+//   }
+
+// });
 
 
 
@@ -29,6 +41,23 @@ var Feed = Backbone.Collection.extend({
 });
 
 var all_posts = new Feed();
+
+
+
+
+
+
+
+
+
+
+// var WhiskeyCollection = Backbone.Collection.extend ({
+//   model: Whiskey,
+//   url: 'http://tiy-atl-fe-server.herokuapp.com/collections/whiskeyapp'
+// });
+
+// // Create an instance of my Collection
+// var whiskey_list = new WhiskeyCollection();
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['post'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -92,7 +121,7 @@ var ListView = Backbone.View.extend({
     //Pass data to template
     var rendered = Handlebars.templates.post({post: this.collection.toJSON()});
     this.$el.find(".post_collection ul").html(rendered);
-    this.$el.find("CHANGE:post_entry_form:CHANGE").show();
+    this.$el.find(".fullpost-unit ul").show();
     return this;
   },
 
@@ -117,8 +146,9 @@ var ListView = Backbone.View.extend({
   //trigger actual event
 
   seeFullpost: function (event){ 
+    console.log("Promting full post view");
     event.preventDefault();
-    window.appr.navigate($(event.target).attr('id'), { trigger: true});
+    window.appr.navigate($(event.target).attr('href'), { trigger: true});
 
     // Save your model; this will save it to the database and re-render the page
     all_posts.add(temp_post).save();
@@ -139,11 +169,12 @@ var ListView = Backbone.View.extend({
 
 
 
+
+
 all_posts.fetch().done( function (){
   new ListView({ collection: all_posts });
 });
 
-//THIS IS WHERE TIM PUT HIS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 
 $('header a').on('click', function (e) {
  e.preventDefault();
@@ -151,9 +182,25 @@ $('header a').on('click', function (e) {
 });
 
 
+//THIS IS WHERE TIM PUT HIS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
+
+// $('header a').on('click', function (e) {
+//  e.preventDefault();
+//  window.appr.navigate("", {trigger: true});
+// });
 
 
 
+
+
+
+
+
+// // Grab all my data from my server
+// // After it's complete, create a new view with data
+// whiskey_list.fetch().done( function (){
+//   new WhiskeyListView({ collection: whiskey_list });
+// });
 
 
 

@@ -1,8 +1,9 @@
+
+
 all_posts.fetch().done( function (){
   new ListView({ collection: all_posts });
 });
 
-//THIS IS WHERE TIM PUT HIS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 
 $('header a').on('click', function (e) {
  e.preventDefault();
@@ -10,9 +11,25 @@ $('header a').on('click', function (e) {
 });
 
 
+//THIS IS WHERE TIM PUT HIS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
+
+// $('header a').on('click', function (e) {
+//  e.preventDefault();
+//  window.appr.navigate("", {trigger: true});
+// });
 
 
 
+
+
+
+
+
+// // Grab all my data from my server
+// // After it's complete, create a new view with data
+// whiskey_list.fetch().done( function (){
+//   new WhiskeyListView({ collection: whiskey_list });
+// });
 
 
 

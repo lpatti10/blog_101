@@ -1,5 +1,8 @@
 var Post = Backbone.Model.extend({
-	defaults: {
+	
+  idAttribute: "_id" ,
+
+  defaults: {
     title: "", 
     content: "", 
     date: "", 
@@ -9,8 +12,6 @@ var Post = Backbone.Model.extend({
 
   },
   
-  idattribute: "_id" ,
-
   initialize: function (){
   	console.log("A new post has been submitted!");
   }
@@ -18,5 +19,16 @@ var Post = Backbone.Model.extend({
 });
 
 
+// var Whiskey = Backbone.Model.extend({
+
+//   idAttribute: '_id',
+
+//   defaults: {
+//     name: '',
+//     description: '',
+//     tried: false
+//   }
+
+// });
 
 
