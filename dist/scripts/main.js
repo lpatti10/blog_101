@@ -49,10 +49,7 @@ var ListView = Backbone.View.extend({
     //Pass data to template
     var template = Handlebars.compile($('#post_feed').html()); // Grabs my handlebars temlate from my index.html file.
     var rendered = template({ posts: this.collection.toJSON() }); // Renders out a block of HTML to be used in my code
-    // this.$el.next().html(''); // Empties out a container I don't need for this view
-    // this.$el.html(rendered); // Throws my rendered data into my `el` using jQuery
     this.$el.find(".post_list ul").html(rendered);
-    // this.$el.find(".full_post ul").show();
     return this;
   },
 
@@ -74,7 +71,7 @@ var ListView = Backbone.View.extend({
       status: "Published",
       date: new Date().toJSON().slice(0,10)
     });
-   
+   console.log("adding and saving")
     all_posts.add(temp_post).save();
 
     //Clears form upon submit
@@ -126,41 +123,35 @@ var SingleView = Backbone.View.extend ({
   // Notice it takes attributes that I've passed in (from my router)
   // I then am setting my "this.whiskey" to equal the postid I passed in
   // ... and more specifically to the whiskey object model I want to work with
-  // ... it is now reusable throuout this view.
+  // ... it is now reusable throughout this view.
 	initialize: function (attrs) {
-		console.log("testing");
 		//Also use this to set post properties if needed
 		this.post = this.collection.get(attrs.postid);
 		this.render();
 	},
 
 	render: function () {
+	
 
-		// var p = this.collection.findWhere({_id: this.options.postid });
+
     var template = Handlebars.compile($('#post_single').html());
-    var rendered = template(this.post.toJSON()); // here is `this.whiskey` again :)
+    var rendered = template(this.post.toJSON()); // here is `this.post` again
     // this.$el.prev().html('');
     // this.$el.html(rendered);
     this.$el.find("ul").html(rendered);
-    console.log(rendered);
+    
+    //Experimental ...
+    // console.log("attempting to hide elements");
+		// $(".post_list").hide();
+		
+		$(".hero-unit").hide();
+		$(".full_post").show();
+
+    // console.log(rendered);
 		return this;
 
-  //   //Experimental ...
-		// $(".post_list").hide();
 
-  //   this.$el.find(".full_post ul").html(rendered);
-  //   this.$el.find(".full_post ul").show();
-  //   return this;
   },
-
-	// render: function (options) {
-	// 	var p = this.collection.findWhere({_id: this.options.postid });
-	// 	// var template = Handlebars.compile($('#post_template_single').html());
-	// 	// var rendered = template(p.toJSON());
- //    var rendered = Handlebars.templates.fullpost({post: this.collection.toJSON()});
-	// 	this.$el.find(".fullpost-unit ul").html(rendered);
-	// 	return this;
-	// }
 
 
 });
@@ -187,7 +178,7 @@ var PostRouter = Backbone.Router.extend({
 
 	//NEW FULL POST VIEW
 	single_post: function (id) {
-		alert("Loading Post " + id);
+		// alert("Loading Post " + id);
 		new SingleView({ postid: id, collection: all_posts });
 	}
 
@@ -199,25 +190,11 @@ var all_posts = new Feed();
 // Grab all my data from my server
 // After it's complete, create a new view with data
 all_posts.fetch().done( function (){
-
-//DEFINE POST ROUTER INSTANCE
+//DEFINING POST ROUTER INSTANCE
 window.router_instance = new PostRouter();
 Backbone.history.start();
 });
 
-
-
-//FETCH data and initiate router and start history watch
-	// all_posts.fetch().done( function (){
-
-	// 	window.appr = new PostRouter();
-	// 	Backbone.history.start();
-	// })
-
-// $('.post_title').on('click', function (e) {
-//  e.preventDefault();
-//  window.appr.navigate("", {trigger: true});
-// });
 
 
 //THIS IS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.

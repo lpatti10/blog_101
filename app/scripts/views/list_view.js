@@ -23,10 +23,7 @@ var ListView = Backbone.View.extend({
     //Pass data to template
     var template = Handlebars.compile($('#post_feed').html()); // Grabs my handlebars temlate from my index.html file.
     var rendered = template({ posts: this.collection.toJSON() }); // Renders out a block of HTML to be used in my code
-    // this.$el.next().html(''); // Empties out a container I don't need for this view
-    // this.$el.html(rendered); // Throws my rendered data into my `el` using jQuery
     this.$el.find(".post_list ul").html(rendered);
-    // this.$el.find(".full_post ul").show();
     return this;
   },
 
@@ -48,7 +45,7 @@ var ListView = Backbone.View.extend({
       status: "Published",
       date: new Date().toJSON().slice(0,10)
     });
-   
+   console.log("adding and saving")
     all_posts.add(temp_post).save();
 
     //Clears form upon submit

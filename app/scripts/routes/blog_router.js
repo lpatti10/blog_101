@@ -20,7 +20,7 @@ var PostRouter = Backbone.Router.extend({
 
 	//NEW FULL POST VIEW
 	single_post: function (id) {
-		alert("Loading Post " + id);
+		// alert("Loading Post " + id);
 		new SingleView({ postid: id, collection: all_posts });
 	}
 
