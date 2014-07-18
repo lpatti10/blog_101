@@ -1,71 +1,71 @@
-//Set-up of listed blog posts as feed
+// This is a view of all of my blog posts
+// I've decided this will also be my home page, but that is defined in my route
 var ListView = Backbone.View.extend({
 
   // Parent element only (vs. jQ) where all events are happening. 
-  el: '.hero-unit',
+  el: ".hero-unit",
 
   events: {
-     "click .submitBtn": "submitForm",
-     // "submit #formID": "submitForm"
-
-     "click a.post_title": "seeFullpost" //h1.title a
+    
+     "submit #formID": "submitForm",
+  // "click #submitBtn": "submitForm",
+     "click .post_title": "seeFullpost"
   },
 
   initialize: function () {
-    this.render();
-    this.collection.on('change', this.render, this);
+    this.render(); // This will run the `render` function below
+    this.collection.on('change', this.render, this); // This watches my collection for when I add/update a whiskey
     // this.collection.on('destroy', this.render, this);
   },
 
   //Render page data
   render: function(){
     //Pass data to template
-    THIS.COLLECTION.SORT();
-    VAR TEMPLATE = HANDLEBARS.COMPILE......DO NOT NEED???
-    var rendered = Handlebars.templates.post({post: this.collection.toJSON()});
-    this.$el.find(".post_collection ul").html(rendered);
-    this.$el.find(".fullpost-unit ul").show();
+    var template = Handlebars.compile($('#post_feed').html()); // Grabs my handlebars temlate from my index.html file.
+    var rendered = template({ posts: this.collection.toJSON() }); // Renders out a block of HTML to be used in my code
+    // this.$el.next().html(''); // Empties out a container I don't need for this view
+    // this.$el.html(rendered); // Throws my rendered data into my `el` using jQuery
+    this.$el.find(".post_list ul").html(rendered);
+    this.$el.find(".full_post ul").show();
     return this;
   },
 
-  submitForm: function (event){
-    event.preventDefault();
-    console.log("I'm clicked");
 
-    // Grab all form data and defining variables for each to use below and create new instance of your model 
+  submitForm: function (event){
+    event.preventDefault(); // Prevents the default click event
+    event.stopPropagation(); // Helps stop the bubbling up effect
+    var item_clicked = $(event.currentTarget); // Gets the object I clicked
+    var post_id = item_clicked.attr('id'); // ?? Gets the ID of that object
+    var post = this.collection.get(post_id); // ?? Gets the instance of my model with the ID
+
+    //Grabs all form data and defines variables for each to use below = new instance of your model 
     var temp_post = new Post({
-      title:  $('#title').val(),
-      content: $('#content').val(),
-      author:  $('#author').val(),
-      tags: $('#tags').val(),
+      title:  $("#title").val(),
+      content: $("#content").val(),
+      author:  $("#author").val(),
+      tags: $("#tags").val(),
       //tags: tags.replace(/\s+/g, '').split(','),
-      status: 'Published',
+      status: "Published",
       date: new Date().toJSON().slice(0,10)
     });
+   
+    all_posts.add(temp_post).save();
 
-      // Save your model; this will save it to the database and re-render the page
-      all_posts.add(temp_post).save();
-
-      //clears form upon submit
-      this.$el.find( '#formID' ).trigger( 'reset' );
-      $(THIS).TRIGGER('RESET');
-
+    //Clears form upon submit
+    this.$el.find( '#formID' ).trigger( 'reset' );
+    // $(this).trigger('reset');
   },
 
-  //Prevents default action like going to URL in this case
-  // Navigating using backbone...Defined in main.js = "appr" stands for "app router" = global variable in js by attaching to window "window.appr"
-  //trigger actual event
+    
+     
 
-  seeFullpost: function (event){ 
-    console.log("Prompting full post view");
-    event.preventDefault();
-    VAR DRINK_ID = $(EVENT.TARGET).ATTR('ID');
-    WINDOW.WHISKEY_ROUTER.NAVIGATE......
-    window.appr.navigate($(event.target).attr('href'), { trigger: true});
-
-  }
 
 });
+
+    // Navigating using backbone...Defined in main.js = "appr" stands for "app router" = global variable in js by attaching to window "window.appr"
+    // window.appr.navigate($(event.target).attr('href'), { trigger: true});
+
+
 
 
 

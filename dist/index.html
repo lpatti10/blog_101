@@ -20,20 +20,9 @@
             <header id="header">
              
                 <h1>myBlog</h1>
-            
-                <div id="bar">
-                    
-                </div>
-
-
-             <!--    <p>Publish Date: <script type="text/javascript">$.now()</script></p> -->
+          
 
                 <input id="title" placeholder="Blog post title..." autofocus="">
-                
-<!--                 <input id="date" type="datetime" autofocus="">
- -->                
-
-
 
                 <textarea id="content" placeholder="Write your post..." autofocus=""></textarea>
                 
@@ -41,36 +30,62 @@
 
                 <input id="tags" placeholder="Meta tags..." autofocus="">
 
-                <button class="submitBtn">submit post</button> 
+                <input id="submitBtn" type="submit" value="submit post">
+
+               <!--  <button class="submitBtn">submit post</button> --> 
             
 
-
-
-                <div class="post_collection">
+                <div class="post_list">
                     <ul></ul>
                 </div>
+
+
+                <div class="full_post">
+                    <ul></ul>
+                </div>
+
             </header>
         </form>
     </div>
 
-    <div class="fullpost-unit">
-        <ul></ul>
-    </div>
+  
 
 
+ <!-- HOME POST FEED TEMPLATE -->
+    <script type="text/x-handlebars-template" id="post_feed">
+        {{#each posts}}
+            <li>
+                <a href="#" id="{{_id}}" class="post_title">{{ title }}</a>
+                <p>{{ content }}</p>
+                <small>{{ author }}</small>
+                <small>{{ date }}</small>
+                <a href="#">{{ tags }}</a>
+            </li>
+        {{/each}}
+    </script>
 
-    <!--<script type="text/x-handlebars-template" id="feed_template">
-    // // The each block helper: You can iterate over a list using the built-in each helper. Inside the block, you can use this to reference the element being iterated over.
-    //     {{#each post}}
-    //         <li>
-    //             <h2>{{{ title }}}</h2>
-    //             <p>{{{ content }}}</p>
-    //             <small>{{{ author }}}</small>
-    //             <small>{{{ date }}}</small>
-    //             <a href="#">{{{ tags }}}</a>
-    //         </li>
-    //     {{/each}}
-    // </script>-->
+<!-- FULL POST VIEW TEMPLATE -->
+    <script type="text/x-handlebars-template" id="post_single">
+        {{#each fullpost}}
+          <li>
+            <h2 id="{{_id}}">{{ title }}</h2>
+            <p>{{ content }}</p>
+            <small>{{ author }}</small>
+            <small>{{ date }}</small>
+            <a href="#">{{ tags }}</a>
+          </li>
+        {{/each}}
+    </script>
+
+   <!--   <p> Tags:
+        {{each tags}}
+             {{#if @last}}
+                 <a href="#">{{this}}</a>
+             {{else}}
+                 <a href="#">{{this}}</a>
+             {{/if}}
+         {{/each}}
+     </p> -->
 
     <script src="scripts/vendor.js"></script>
 

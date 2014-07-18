@@ -1,16 +1,20 @@
+//Instance of collection
+var all_posts = new Feed();
 
 
+// Grab all my data from my server
+// After it's complete, create a new view with data
 all_posts.fetch().done( function (){
   new ListView({ collection: all_posts });
 });
 
 
 //FETCH data and initiate router and start history watch
-	all_posts.fetch().done( function (){
+	// all_posts.fetch().done( function (){
 
-		window.appr = new PostRouter();
-		Backbone.history.start();
-	})
+	// 	window.appr = new PostRouter();
+	// 	Backbone.history.start();
+	// })
 
 // $('.post_title').on('click', function (e) {
 //  e.preventDefault();
@@ -30,21 +34,3 @@ all_posts.fetch().done( function (){
 
 
 
-
-
-// // Grab all my data from my server
-// // After it's complete, create a new view with data
-// whiskey_list.fetch().done( function (){
-//   new WhiskeyListView({ collection: whiskey_list });
-// });
-
-
-
-// Get and Compile My Template
-// var template = Handlebars.compile($('#feed_template').html());
- 
-// Pass the `data` to my compiled template to render it
-// var rendered = template(data);
- 
-// Choose a spot on my page and dump my rendered template HTML into it.
-// $('.post_collection').html(rendered);

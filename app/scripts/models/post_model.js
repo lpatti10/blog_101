@@ -8,7 +8,7 @@ var Post = Backbone.Model.extend({
     date: "", 
     status: "", 
     author: "", 
-    tags: [],
+    tags: []
 
   },
   
@@ -17,18 +17,3 @@ var Post = Backbone.Model.extend({
   }
 
 });
-
-
-// var Whiskey = Backbone.Model.extend({
-
-//   idAttribute: '_id',
-
-//   defaults: {
-//     name: '',
-//     description: '',
-//     tried: false
-//   }
-
-// });
-
-
