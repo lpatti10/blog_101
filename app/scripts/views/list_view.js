@@ -26,7 +26,7 @@ var ListView = Backbone.View.extend({
     // this.$el.next().html(''); // Empties out a container I don't need for this view
     // this.$el.html(rendered); // Throws my rendered data into my `el` using jQuery
     this.$el.find(".post_list ul").html(rendered);
-    this.$el.find(".full_post ul").show();
+    // this.$el.find(".full_post ul").show();
     return this;
   },
 
@@ -56,8 +56,17 @@ var ListView = Backbone.View.extend({
     // $(this).trigger('reset');
   },
 
-    
-     
+
+  seeFullpost: function (event){ 
+    console.log("Prompting full post view");
+    event.preventDefault();
+    event.stopPropagation();
+
+    // These 2 lines, get my ID and then route to my URL with the ID in it
+    // My router then sees that and runs the proper function based on the routes I set up.
+    var post_id = $(event.target).attr('id');
+    window.router_instance.navigate('#post/'+post_id, {trigger: true});
+  }     
 
 
 });

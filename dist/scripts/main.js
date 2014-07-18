@@ -52,7 +52,7 @@ var ListView = Backbone.View.extend({
     // this.$el.next().html(''); // Empties out a container I don't need for this view
     // this.$el.html(rendered); // Throws my rendered data into my `el` using jQuery
     this.$el.find(".post_list ul").html(rendered);
-    this.$el.find(".full_post ul").show();
+    // this.$el.find(".full_post ul").show();
     return this;
   },
 
@@ -82,8 +82,17 @@ var ListView = Backbone.View.extend({
     // $(this).trigger('reset');
   },
 
-    
-     
+
+  seeFullpost: function (event){ 
+    console.log("Prompting full post view");
+    event.preventDefault();
+    event.stopPropagation();
+
+    // These 2 lines, get my ID and then route to my URL with the ID in it
+    // My router then sees that and runs the proper function based on the routes I set up.
+    var post_id = $(event.target).attr('id');
+    window.router_instance.navigate('#post/'+post_id, {trigger: true});
+  }     
 
 
 });
@@ -119,18 +128,29 @@ var SingleView = Backbone.View.extend ({
   // ... and more specifically to the whiskey object model I want to work with
   // ... it is now reusable throuout this view.
 	initialize: function (attrs) {
+		console.log("testing");
+		//Also use this to set post properties if needed
 		this.post = this.collection.get(attrs.postid);
 		this.render();
 	},
 
 	render: function () {
+
+		// var p = this.collection.findWhere({_id: this.options.postid });
     var template = Handlebars.compile($('#post_single').html());
     var rendered = template(this.post.toJSON()); // here is `this.whiskey` again :)
-    this.$el.prev().html('');
-    this.$el.html(rendered);
-    // this.$el.find(".full_post ul").html(rendered);
-    // this.$el.find(".post_list ul").show();
-    // return this;
+    // this.$el.prev().html('');
+    // this.$el.html(rendered);
+    this.$el.find("ul").html(rendered);
+    console.log(rendered);
+		return this;
+
+  //   //Experimental ...
+		// $(".post_list").hide();
+
+  //   this.$el.find(".full_post ul").html(rendered);
+  //   this.$el.find(".full_post ul").show();
+  //   return this;
   },
 
 	// render: function (options) {
@@ -142,16 +162,6 @@ var SingleView = Backbone.View.extend ({
 	// 	return this;
 	// }
 
-	seeFullpost: function (event){ 
-    console.log("Prompting full post view");
-    event.preventDefault();
-    event.stopPropagation();
-
-    // These 2 lines, get my ID and then route to my URL with the ID in it
-    // My router then sees that and runs the proper function based on the routes I set up.
-    var post_id = $(event.target).attr('id');
-    window.blog_router.navigate('#post/'+post_id, {trigger: true});
-  }
 
 });
 
@@ -167,7 +177,7 @@ var PostRouter = Backbone.Router.extend({
 		'': 'home',
 		//"posts is defining what URL & will appear in this route"
 		//Calling /:id allows us to pass it in to function below
-		"posts/:id": 'single_post'
+		"post/:id": 'single_post'
 	},
 
 	//HOME PAGE VIEW AS FEED/LIST
@@ -189,8 +199,12 @@ var all_posts = new Feed();
 // Grab all my data from my server
 // After it's complete, create a new view with data
 all_posts.fetch().done( function (){
-  new ListView({ collection: all_posts });
+
+//DEFINE POST ROUTER INSTANCE
+window.router_instance = new PostRouter();
+Backbone.history.start();
 });
+
 
 
 //FETCH data and initiate router and start history watch

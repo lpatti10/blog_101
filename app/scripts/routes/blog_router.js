@@ -10,7 +10,7 @@ var PostRouter = Backbone.Router.extend({
 		'': 'home',
 		//"posts is defining what URL & will appear in this route"
 		//Calling /:id allows us to pass it in to function below
-		"posts/:id": 'single_post'
+		"post/:id": 'single_post'
 	},
 
 	//HOME PAGE VIEW AS FEED/LIST
