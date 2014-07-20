@@ -13,6 +13,8 @@
     <!-- endbower -->
     <!-- endbuild -->
 
+    <link rel="stylesheet" href="fonts/octicons/octicons.css">
+
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
@@ -27,8 +29,9 @@
         <form id="formID">
             <header id="header">
              
-                <h1>myBlog</h1>
-          
+               
+                <div id="lamp"><img src="images/icon_60666.svg" /></div>
+              <!--   <h1>Desk Lamp Diaries</h1> -->
 
                 <input id="title" placeholder="Blog post title..." autofocus="">
 
@@ -62,6 +65,7 @@
     <script type="text/x-handlebars-template" id="post_feed">
         {{#each posts}}
             <li>
+                <div class="delete"><span class="octicon octicon-x"></span></div>
                 <a href="#" id="{{_id}}" class="post_title">{{ title }}</a>
                 <p>{{ content }}</p>
                 <small>{{ author }}</small>
@@ -83,6 +87,9 @@
           </li>
        
     </script>
+
+<!--     <div class="zippo"><img src="images/icon_1426.svg" /></div>
+ -->
 
    <!--   <p> Tags:
         {{each tags}}

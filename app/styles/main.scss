@@ -4,9 +4,9 @@
 
 // Custom Styles
 body {
-  background: #fafafa;
+  // background-image: url('images/congruent_pentagon.png');
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #333;
+  background-color: #70A288;
 }
 
 .hero-unit {
@@ -15,19 +15,47 @@ body {
   font-size: 18px;
   font-weight: 200;
   line-height: 30px;
-  background-color: #eee;
+  background-color: #2E3236;
   border-radius: 6px;
   padding: 60px;
+  padding-top: 30px;
   h1 {
-    font-size: 90px;
+    font-size: 60px;
     line-height: 1;
     letter-spacing: -1px;
+    display: inline;
+  }
+  #lamp {
+    margin: 0px auto;
+    padding-bottom: 15px;
+      >img {
+      display:block;
+      margin:auto;
+      // fill: #2E3136;
+      background: #F0122B;
+      border-radius: 2em;
+      max-width: 60px;
+      height: auto;
+      padding: 5px;
+      // opacity: 0.7;
+      // border: 1px solid rgba(255,255,255,0.3);  
+    }
+  }
+}
+ul{
+  margin-top: 90px;
+  li {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #6FB087;   
+    list-style-type: none;
+    > p {
+      margin-top: 10px;
+      margin-bottom: 0px;
+    }
   }
 }
 
-li {
-  list-style-type: none;
-}
 
 #title, #content, #author, #tags {
   padding: 16px 16px 16px 16px;
@@ -47,12 +75,26 @@ li {
 #submitBtn {
   float: right;
   margin-top: 10px;
+  color: #F0122B;
+  line-height: 30px;
+  padding: 7px 14px;
+  border: 1px solid #F0122B;
+  background-color: #2E3236;
+  // border-radius: 2em;
+  transition: all 0.3s ease;
+  &:hover {
+    background: #F0122B;
+    color: #2E3236;
+  }  
 }
 
 a.post_title {
-  font-size: 60px;
+  margin-top: 60px;
+  color: #6FB087;
+  font-size: 50px;
   line-height: 1;
   letter-spacing: -1px;
+  text-decoration: none;
 }
 
 .fullpost-unit {
@@ -64,4 +106,38 @@ a.post_title {
   background-color: #eee;
   border-radius: 6px;
   padding: 60px;
+}
+
+a {
+  color: #F0122B;
+}
+
+.delete {
+  display:inline-block;
+  float: right;
+  border: 1px solid #F0122B;
+  border-radius: 2em;
+  background-color: #2E3236;
+  transition: all 0.3s ease;
+  // padding: 15px;
+  width: 40px;
+  height: 40px;
+  &:hover {
+    background: #F0122B;
+    // color: #2E3236;
+  }
+  .octicon-x {
+    text-align: center;
+    color: #F0122B;
+    font-size: 30px;
+    padding-top: 5px;
+    padding-left: 10px;
+    &:hover {
+      color: #2E3236;
+    }
+  }
+}
+
+p, small {
+  color: #A9A9A9;
 }
