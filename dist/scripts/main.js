@@ -21,7 +21,8 @@ var Post = Backbone.Model.extend({
 var Feed = Backbone.Collection.extend({
 
     model: Post,
-    url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog"
+    // url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog"
+    url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog2/"
     
 });
 // This is a view of all of my blog posts
@@ -35,13 +36,14 @@ var ListView = Backbone.View.extend({
     
      "submit #formID": "submitForm",
   // "click #submitBtn": "submitForm",
-     "click .post_title": "seeFullpost"
+     "click .post_title": "seeFullpost",
+     "click .delete": "omitPost"
   },
 
   initialize: function () {
     this.render(); // This will run the `render` function below
     this.collection.on('change', this.render, this); // This watches my collection for when I add/update a whiskey
-    // this.collection.on('destroy', this.render, this);
+    this.collection.on('destroy', this.render, this);
   },
 
   //Render page data
@@ -50,6 +52,10 @@ var ListView = Backbone.View.extend({
     var template = Handlebars.compile($('#post_feed').html()); // Grabs my handlebars temlate from my index.html file.
     var rendered = template({ posts: this.collection.toJSON() }); // Renders out a block of HTML to be used in my code
     this.$el.find(".post_list ul").html(rendered);
+    
+    //EXPERIMENTAL
+    $(".full_post").hide();
+    
     return this;
   },
 
@@ -67,7 +73,7 @@ var ListView = Backbone.View.extend({
       content: $("#content").val(),
       author:  $("#author").val(),
       tags: $("#tags").val(),
-      //tags: tags.replace(/\s+/g, '').split(','),
+      // tags: tags.replace(/\s+/g, '').split(','),
       status: "Published",
       date: new Date().toJSON().slice(0,10)
     });
@@ -88,9 +94,26 @@ var ListView = Backbone.View.extend({
     // These 2 lines, get my ID and then route to my URL with the ID in it
     // My router then sees that and runs the proper function based on the routes I set up.
     var post_id = $(event.target).attr('id');
-    window.router_instance.navigate('#post/'+post_id, {trigger: true});
-  }     
+    window.router_instance.navigate('#post/'+post_id, { trigger: true });
+  },     
 
+
+  omitPost: function (event){
+    console.log("Prompting delete post");
+    event.preventDefault();
+    event.stopPropagation();
+
+    // var post_id = $(event.target).attr('id');
+    // var omit = this.collection.get($('.post_id').val());
+    // post_id.destroy({success: function (){
+    //   window.router_instance.navigate("", { trigger: true });  
+    // }});
+    if (window.confirm("Are you sure?")) {
+      this.post.destroy({success: function () { 
+        window.router_instance.navigate("", { trigger: true }); // E.T. Phone Home (route me home)
+      }});
+    }
+  }
 
 });
 
@@ -136,13 +159,9 @@ var SingleView = Backbone.View.extend ({
 
     var template = Handlebars.compile($('#post_single').html());
     var rendered = template(this.post.toJSON()); // here is `this.post` again
-    // this.$el.prev().html('');
-    // this.$el.html(rendered);
     this.$el.find("ul").html(rendered);
     
-    //Experimental ...
-    // console.log("attempting to hide elements");
-		// $(".post_list").hide();
+ 
 		
 		$(".hero-unit").hide();
 		$(".full_post").show();
@@ -190,12 +209,17 @@ var all_posts = new Feed();
 // Grab all my data from my server
 // After it's complete, create a new view with data
 all_posts.fetch().done( function (){
-//DEFINING POST ROUTER INSTANCE
-window.router_instance = new PostRouter();
-Backbone.history.start();
+	//DEFINING POST ROUTER INSTANCE
+	window.router_instance = new PostRouter();
+	Backbone.history.start();
 });
 
-
+//EXPERIMENTAL
+post.destroy().done( function (){
+	//DEFINING POST ROUTER INSTANCE
+	window.router_instance = new PostRouter();
+	Backbone.history.start();
+});
 
 //THIS IS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 

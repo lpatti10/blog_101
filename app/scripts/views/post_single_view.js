@@ -25,13 +25,9 @@ var SingleView = Backbone.View.extend ({
 
     var template = Handlebars.compile($('#post_single').html());
     var rendered = template(this.post.toJSON()); // here is `this.post` again
-    // this.$el.prev().html('');
-    // this.$el.html(rendered);
     this.$el.find("ul").html(rendered);
     
-    //Experimental ...
-    // console.log("attempting to hide elements");
-		// $(".post_list").hide();
+ 
 		
 		$(".hero-unit").hide();
 		$(".full_post").show();

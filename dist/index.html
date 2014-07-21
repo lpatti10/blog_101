@@ -70,13 +70,17 @@
 <!-- FULL POST VIEW TEMPLATE -->
     <script type="text/x-handlebars-template" id="post_single">
         
-          <li>
+        <div class="lamp_solo"><img src="images/icon_60666.svg" /></div>
+
+        <li>
             <h2 id="{{_id}}">{{ title }}</h2>
-            <p>{{ content }}</p>
-            <small>{{ author }}</small>
-            <small>{{ date }}</small>
-            <a href="#">{{ tags }}</a>
-          </li>
+            <p class="full">{{ content }}</p>
+            <div class="boiler">
+                <small class="full">{{ author }}</small>
+                <small class="full">{{ date }}</small>
+                <a class="full" href="#">{{ tags }}</a>
+            </div>
+        </li>
        
     </script>
 
