@@ -10,12 +10,12 @@ all_posts.fetch().done( function (){
 	Backbone.history.start();
 });
 
-//EXPERIMENTAL
-post.destroy().done( function (){
-	//DEFINING POST ROUTER INSTANCE
-	window.router_instance = new PostRouter();
-	Backbone.history.start();
-});
+// //EXPERIMENTAL DO NOT USE
+// omit.destroy().done( function (){
+// 	//DEFINING POST ROUTER INSTANCE
+// 	window.router_instance = new PostRouter();
+// 	Backbone.history.start();
+// });
 
 //THIS IS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 

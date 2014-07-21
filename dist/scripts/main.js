@@ -35,15 +35,16 @@ var ListView = Backbone.View.extend({
   events: {
     
      "submit #formID": "submitForm",
-  // "click #submitBtn": "submitForm",
      "click .post_title": "seeFullpost",
      "click .delete": "omitPost"
   },
 
-  initialize: function () {
+  //EXPERIMENTING with 'attrs' param and first line call...
+  initialize: function (attrs) {
+    this.options = attrs;
     this.render(); // This will run the `render` function below
-    this.collection.on('change', this.render, this); // This watches my collection for when I add/update a whiskey
-    this.collection.on('destroy', this.render, this);
+    this.collection.on('change', this.render, this); // This watches my collection for when I add/update a post
+    this.collection.on('destroy', this.render, this); // This watches my collection for when I delete a post
   },
 
   //Render page data
@@ -65,7 +66,17 @@ var ListView = Backbone.View.extend({
     event.stopPropagation(); // Helps stop the bubbling up effect
     var item_clicked = $(event.currentTarget); // Gets the object I clicked
     var post_id = item_clicked.attr('id'); // ?? Gets the ID of that object
+    
     var post = this.collection.get(post_id); // ?? Gets the instance of my model with the ID
+
+
+    //GREELEY'S VARIATION OF ABOVE LINE:
+    // var post = this.collection.get(attributes.post_id);
+      // 1. creating a variable ... a local 'this' mapped var = this.post
+      // 2. Looking into my collection with this.collection
+      // 3. Using BB's 'get' method to get model
+      // 4. Using object passed in 'attributes' to drill down our id 'attributes.id'
+      // 5. returns 'this.post' = our specific model from our url
 
     //Grabs all form data and defines variables for each to use below = new instance of your model 
     var temp_post = new Post({
@@ -73,11 +84,11 @@ var ListView = Backbone.View.extend({
       content: $("#content").val(),
       author:  $("#author").val(),
       tags: $("#tags").val(),
-      // tags: tags.replace(/\s+/g, '').split(','),
+      // .replace(/\s+/g, '').split(','),
       status: "Published",
       date: new Date().toJSON().slice(0,10)
     });
-   console.log("adding and saving")
+    console.log("adding and saving")
     all_posts.add(temp_post).save();
 
     //Clears form upon submit
@@ -94,31 +105,37 @@ var ListView = Backbone.View.extend({
     // These 2 lines, get my ID and then route to my URL with the ID in it
     // My router then sees that and runs the proper function based on the routes I set up.
     var post_id = $(event.target).attr('id');
+
     window.router_instance.navigate('#post/'+post_id, { trigger: true });
   },     
 
 
   omitPost: function (event){
-    console.log("Prompting delete post");
     event.preventDefault();
     event.stopPropagation();
-
-    // var post_id = $(event.target).attr('id');
-    // var omit = this.collection.get($('.post_id').val());
-    // post_id.destroy({success: function (){
-    //   window.router_instance.navigate("", { trigger: true });  
-    // }});
+    console.log("Prompting delete post");
+    ///////////////
     if (window.confirm("Are you sure?")) {
-      this.post.destroy({success: function () { 
+      console.log("Delete pressed");
+      //Specifically the x needs id
+     
+      var x_id = $(event.currentTarget).attr('id');
+    
+      var omit = this.collection.get(x_id);
+      
+      omit.destroy({success: function (){
         window.router_instance.navigate("", { trigger: true }); // E.T. Phone Home (route me home)
+        
       }});
+
+    ///////////////           
     }
   }
-
 });
 
     // Navigating using backbone...Defined in main.js = "appr" stands for "app router" = global variable in js by attaching to window "window.appr"
     // window.appr.navigate($(event.target).attr('href'), { trigger: true});
+
 
 
 
@@ -214,12 +231,12 @@ all_posts.fetch().done( function (){
 	Backbone.history.start();
 });
 
-//EXPERIMENTAL
-post.destroy().done( function (){
-	//DEFINING POST ROUTER INSTANCE
-	window.router_instance = new PostRouter();
-	Backbone.history.start();
-});
+// //EXPERIMENTAL DO NOT USE
+// omit.destroy().done( function (){
+// 	//DEFINING POST ROUTER INSTANCE
+// 	window.router_instance = new PostRouter();
+// 	Backbone.history.start();
+// });
 
 //THIS IS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 

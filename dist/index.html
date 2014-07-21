@@ -57,7 +57,7 @@
     <script type="text/x-handlebars-template" id="post_feed">
         {{#each posts}}
             <li>
-                <div class="delete"><span class="octicon octicon-x"></span></div>
+                <div id="{{_id}}" class="delete"><span class="octicon octicon-x"></span></div>
                 <a href="#" id="{{_id}}" class="post_title">{{ title }}</a>
                 <p>{{ content }}</p>
                 <small>{{ author }}</small>
