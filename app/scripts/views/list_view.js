@@ -18,6 +18,7 @@ var ListView = Backbone.View.extend({
     this.render(); // This will run the `render` function below
     this.collection.on('change', this.render, this); // This watches my collection for when I add/update a post
     this.collection.on('destroy', this.render, this); // This watches my collection for when I delete a post
+    //this.collection.on('add', this.render, this);  // 'Change' doesn't watch for 'adds'
   },
 
   //Render page data

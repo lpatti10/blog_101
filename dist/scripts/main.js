@@ -1,3 +1,7 @@
+// TIM'S VALIDATION HERE
+
+
+
 var Post = Backbone.Model.extend({
 	
   idAttribute: "_id" ,
@@ -45,6 +49,7 @@ var ListView = Backbone.View.extend({
     this.render(); // This will run the `render` function below
     this.collection.on('change', this.render, this); // This watches my collection for when I add/update a post
     this.collection.on('destroy', this.render, this); // This watches my collection for when I delete a post
+    //this.collection.on('add', this.render, this);  // 'Change' doesn't watch for 'adds'
   },
 
   //Render page data
@@ -207,15 +212,27 @@ var PostRouter = Backbone.Router.extend({
 		"post/:id": 'single_post'
 	},
 
+	// TIM'S ZOMBIE FIX
+	// initialize: function () {
+	// 	this.appView = new AppView();
+	// },
+
+
 	//HOME PAGE VIEW AS FEED/LIST
 	home: function () {
 		new ListView({ collection: all_posts });
+
+		// TIM'S ZOMBIE FIX
+		// this.appView.showView(listView);
 	},
 
 	//NEW FULL POST VIEW
 	single_post: function (id) {
 		// alert("Loading Post " + id);
 		new SingleView({ postid: id, collection: all_posts });
+
+		// TIM'S ZOMBIE FIX
+		// this.appView.showView(editView);
 	}
 
 });
@@ -230,6 +247,50 @@ all_posts.fetch().done( function (){
 	window.router_instance = new PostRouter();
 	Backbone.history.start();
 });
+
+//TIM'S ZOMBIE FIX
+// var AppView = function (){
+
+//   this.showView = function(view) {
+//     if (this.currentView){
+//       this.currentView.remove();
+//     }
+
+//     this.currentView = view;
+//     this.currentView.render();
+
+//     $(".whiskey_cont").html(this.currentView.el);
+//   }
+
+// }
+
+// Save your Parse Object
+//   if(validate !== false) {
+//     temp_whiskey.save(null, {
+//       success: function(temp_whiskey) {
+//         // Adds to my collection
+//         whiskey_list.add(temp_whiskey);
+//         // Resets my form - skadoosh
+//         $(this).trigger('reset');
+//         $('.modal-window').removeClass('modal-open');
+//       },
+//       error: function(gameScore, error) {
+//         alert('ERROR: ' + error.message);
+//       }
+//     });
+//   } else {
+//     alert('You must fill out both fields!');
+//   }
+
+// });
+
+
+
+
+
+
+
+
 
 // //EXPERIMENTAL DO NOT USE
 // omit.destroy().done( function (){

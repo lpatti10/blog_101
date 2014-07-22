@@ -1,3 +1,7 @@
+// TIM'S VALIDATION HERE
+
+
+
 var Post = Backbone.Model.extend({
 	
   idAttribute: "_id" ,
