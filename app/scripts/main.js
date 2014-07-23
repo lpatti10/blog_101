@@ -20,8 +20,10 @@ all_posts.fetch().done( function (){
 // ZOMBIE FIX 
 var AppView = function (){
 
+// IS CURRENT VIEW AVAILABLE??
   this.showView = function(view) {
     if (this.currentView){
+      // IF THERE'S A CURRENT VIEW, REMOVE IT
       this.currentView.remove();
     }
 

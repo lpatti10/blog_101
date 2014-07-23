@@ -13,7 +13,7 @@ var PostRouter = Backbone.Router.extend({
 		"post/:id": 'single_post'
 	},
 
-	// ZOMBIE FIX 
+	// ZOMBIE FIX : INSTANCE VARIABLE "ONLY EVER CREATING ONE"
   initialize: function () {
     this.appView = new AppView();
   },
@@ -21,8 +21,9 @@ var PostRouter = Backbone.Router.extend({
 	//HOME PAGE VIEW AS FEED/LIST
 	home: function () {
 		var list_view = new ListView({ collection: all_posts });
-		// ZOMBIE FIX
+		// ZOMBIE FIX : CALLING METHOD OF SHOWVIEW ON INSTANCE OF APPVIEW
 		this.appView.showView(list_view);
+		//SEE TIM'S NEW UPDATED METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	},
 
 	//NEW FULL POST VIEW
@@ -31,6 +32,7 @@ var PostRouter = Backbone.Router.extend({
 		var post_single_view = new SingleView({ postid: id, collection: all_posts });
 		// ZOMBIE FIX
 		this.appView.showView(post_single_view);
+		//SEE TIM'S NEW UPDATED METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
 });

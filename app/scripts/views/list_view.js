@@ -28,7 +28,10 @@ var ListView = Backbone.View.extend({
     var template = Handlebars.compile($('#post_feed').html()); // Grabs my handlebars temlate from my index.html file.
     var rendered = template({ posts: this.collection.toJSON() }); // Renders out a block of HTML to be used in my code
     this.$el.find(".post_list ul").html(rendered);
-    
+
+    //EXPERIMENTAL WEDNESDAY TO ATTEMPT REPAIR OF BACK BUTTON
+    $(".hero-unit").show();
+
     //EXPERIMENTAL
     $(".full_post").hide();
     
