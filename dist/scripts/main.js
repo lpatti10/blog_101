@@ -2,9 +2,12 @@
 
 
 
-var Post = Backbone.Model.extend({
+var Post =  Parse.Object.extend({
 	
-  idAttribute: "_id" ,
+  // Class name (data base table) needed for Parse
+  className: 'BlogItem',
+
+  idAttribute: "objectId" ,
 
   defaults: {
     title: "", 
@@ -22,11 +25,11 @@ var Post = Backbone.Model.extend({
 
 });
 
-var Feed = Backbone.Collection.extend({
+var Feed = Parse.Collection.extend({
 
     model: Post,
     // url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog"
-    url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog2/"
+    // url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog2"
     
 });
 // This is a view of all of my blog posts
@@ -49,8 +52,9 @@ var ListView = Backbone.View.extend({
     this.render(); // This will run the `render` function below
     this.collection.on('change', this.render, this); // This watches my collection for when I add/update a post
     this.collection.on('destroy', this.render, this); // This watches my collection for when I delete a post
-    //this.collection.on('add', this.render, this);  // 'Change' doesn't watch for 'adds'
-  },
+    this.collection.on('add', this.render, this); // 'Change' doesn't watch for 'adds'
+  }, 
+  
 
   //Render page data
   render: function(){
@@ -89,16 +93,31 @@ var ListView = Backbone.View.extend({
       content: $("#content").val(),
       author:  $("#author").val(),
       tags: $("#tags").val(),
-      // .replace(/\s+/g, '').split(','),
+      // tags: tags.replace(/\s+/g, '').split(','),
       status: "Published",
       date: new Date().toJSON().slice(0,10)
     });
     console.log("adding and saving")
-    all_posts.add(temp_post).save();
 
-    //Clears form upon submit
-    this.$el.find( '#formID' ).trigger( 'reset' );
-    // $(this).trigger('reset');
+// Save your Parse Object
+  
+    temp_post.save(null, {
+      success: function(temp_post) {
+        // Adds to my collection
+        all_posts.add(temp_post);
+        // Resets my form 
+        $( '#formID' ).trigger( 'reset' );
+
+        // $(this).trigger('reset');
+        // $('.modal-window').removeClass('modal-open');
+      }
+    });
+
+    // all_posts.add(temp_post);
+    
+  //Clears form upon submit
+    // this.$el.find( '#formID' ).trigger( 'reset' );
+   
   },
 
 
@@ -119,27 +138,28 @@ var ListView = Backbone.View.extend({
     event.preventDefault();
     event.stopPropagation();
     console.log("Prompting delete post");
-    ///////////////
+
     if (window.confirm("Are you sure?")) {
       console.log("Delete pressed");
+
       //Specifically the x needs id
-     
       var x_id = $(event.currentTarget).attr('id');
-    
+        console.log("Grabbed ID of X button");
+
       var omit = this.collection.get(x_id);
+        console.log("Getting");
       
       omit.destroy({success: function (){
-        window.router_instance.navigate("", { trigger: true }); // E.T. Phone Home (route me home)
-        
+        window.router_instance.navigate("", { trigger: true }); // (route back home)
       }});
 
-    ///////////////           
     }
   }
 });
 
     // Navigating using backbone...Defined in main.js = "appr" stands for "app router" = global variable in js by attaching to window "window.appr"
     // window.appr.navigate($(event.target).attr('href'), { trigger: true});
+
 
 
 
@@ -173,6 +193,8 @@ var SingleView = Backbone.View.extend ({
 		//Also use this to set post properties if needed
 		this.post = this.collection.get(attrs.postid);
 		this.render();
+
+		   
 	},
 
 	render: function () {
@@ -180,7 +202,8 @@ var SingleView = Backbone.View.extend ({
 
 
     var template = Handlebars.compile($('#post_single').html());
-    var rendered = template(this.post.toJSON()); // here is `this.post` again
+
+    var rendered = template(this.post.toJSON()); 
     this.$el.find("ul").html(rendered);
     
  
@@ -188,7 +211,7 @@ var SingleView = Backbone.View.extend ({
 		$(".hero-unit").hide();
 		$(".full_post").show();
 
-    // console.log(rendered);
+
 		return this;
 
 
@@ -212,32 +235,35 @@ var PostRouter = Backbone.Router.extend({
 		"post/:id": 'single_post'
 	},
 
-	// TIM'S ZOMBIE FIX
-	// initialize: function () {
-	// 	this.appView = new AppView();
-	// },
-
+	// ZOMBIE FIX 
+  initialize: function () {
+    this.appView = new AppView();
+  },
 
 	//HOME PAGE VIEW AS FEED/LIST
 	home: function () {
-		new ListView({ collection: all_posts });
-
-		// TIM'S ZOMBIE FIX
-		// this.appView.showView(listView);
+		var list_view = new ListView({ collection: all_posts });
+		// ZOMBIE FIX
+		this.appView.showView(list_view);
 	},
 
 	//NEW FULL POST VIEW
 	single_post: function (id) {
 		// alert("Loading Post " + id);
-		new SingleView({ postid: id, collection: all_posts });
-
-		// TIM'S ZOMBIE FIX
-		// this.appView.showView(editView);
+		var post_single_view = new SingleView({ postid: id, collection: all_posts });
+		// ZOMBIE FIX
+		this.appView.showView(post_single_view);
 	}
 
 });
+// Initialize Parse
+Parse.initialize("EFaSOx8OMDQzadR62QT66Haedv7aTbjd70PaEDTU", "eIKnA5CTuTAmkv1DPi2AAWeVJC5dHyTJc9mPaoA2");
+
+
 //Instance of collection
 var all_posts = new Feed();
+
+
 
 
 // Grab all my data from my server
@@ -247,6 +273,25 @@ all_posts.fetch().done( function (){
 	window.router_instance = new PostRouter();
 	Backbone.history.start();
 });
+
+
+// ZOMBIE FIX 
+var AppView = function (){
+
+  this.showView = function(view) {
+    if (this.currentView){
+      this.currentView.remove();
+    }
+
+    this.currentView = view;
+    this.currentView.render();
+
+    $(".zombie_cont").html(this.currentView.el);
+  }
+
+}
+
+
 
 //TIM'S ZOMBIE FIX
 // var AppView = function (){
@@ -264,40 +309,8 @@ all_posts.fetch().done( function (){
 
 // }
 
-// Save your Parse Object
-//   if(validate !== false) {
-//     temp_whiskey.save(null, {
-//       success: function(temp_whiskey) {
-//         // Adds to my collection
-//         whiskey_list.add(temp_whiskey);
-//         // Resets my form - skadoosh
-//         $(this).trigger('reset');
-//         $('.modal-window').removeClass('modal-open');
-//       },
-//       error: function(gameScore, error) {
-//         alert('ERROR: ' + error.message);
-//       }
-//     });
-//   } else {
-//     alert('You must fill out both fields!');
-//   }
-
-// });
 
 
-
-
-
-
-
-
-
-// //EXPERIMENTAL DO NOT USE
-// omit.destroy().done( function (){
-// 	//DEFINING POST ROUTER INSTANCE
-// 	window.router_instance = new PostRouter();
-// 	Backbone.history.start();
-// });
 
 //THIS IS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
 

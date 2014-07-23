@@ -17,6 +17,8 @@ var SingleView = Backbone.View.extend ({
 		//Also use this to set post properties if needed
 		this.post = this.collection.get(attrs.postid);
 		this.render();
+
+		   
 	},
 
 	render: function () {
@@ -24,7 +26,8 @@ var SingleView = Backbone.View.extend ({
 
 
     var template = Handlebars.compile($('#post_single').html());
-    var rendered = template(this.post.toJSON()); // here is `this.post` again
+
+    var rendered = template(this.post.toJSON()); 
     this.$el.find("ul").html(rendered);
     
  
@@ -32,7 +35,7 @@ var SingleView = Backbone.View.extend ({
 		$(".hero-unit").hide();
 		$(".full_post").show();
 
-    // console.log(rendered);
+
 		return this;
 
 

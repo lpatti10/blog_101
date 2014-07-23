@@ -18,8 +18,9 @@ var ListView = Backbone.View.extend({
     this.render(); // This will run the `render` function below
     this.collection.on('change', this.render, this); // This watches my collection for when I add/update a post
     this.collection.on('destroy', this.render, this); // This watches my collection for when I delete a post
-    //this.collection.on('add', this.render, this);  // 'Change' doesn't watch for 'adds'
-  },
+    this.collection.on('add', this.render, this); // 'Change' doesn't watch for 'adds'
+  }, 
+  
 
   //Render page data
   render: function(){
@@ -58,16 +59,31 @@ var ListView = Backbone.View.extend({
       content: $("#content").val(),
       author:  $("#author").val(),
       tags: $("#tags").val(),
-      // .replace(/\s+/g, '').split(','),
+      // tags: tags.replace(/\s+/g, '').split(','),
       status: "Published",
       date: new Date().toJSON().slice(0,10)
     });
     console.log("adding and saving")
-    all_posts.add(temp_post).save();
 
-    //Clears form upon submit
-    this.$el.find( '#formID' ).trigger( 'reset' );
-    // $(this).trigger('reset');
+// Save your Parse Object
+  
+    temp_post.save(null, {
+      success: function(temp_post) {
+        // Adds to my collection
+        all_posts.add(temp_post);
+        // Resets my form 
+        $( '#formID' ).trigger( 'reset' );
+
+        // $(this).trigger('reset');
+        // $('.modal-window').removeClass('modal-open');
+      }
+    });
+
+    // all_posts.add(temp_post);
+    
+  //Clears form upon submit
+    // this.$el.find( '#formID' ).trigger( 'reset' );
+   
   },
 
 
@@ -88,27 +104,28 @@ var ListView = Backbone.View.extend({
     event.preventDefault();
     event.stopPropagation();
     console.log("Prompting delete post");
-    ///////////////
+
     if (window.confirm("Are you sure?")) {
       console.log("Delete pressed");
+
       //Specifically the x needs id
-     
       var x_id = $(event.currentTarget).attr('id');
-    
+        console.log("Grabbed ID of X button");
+
       var omit = this.collection.get(x_id);
+        console.log("Getting");
       
       omit.destroy({success: function (){
-        window.router_instance.navigate("", { trigger: true }); // E.T. Phone Home (route me home)
-        
+        window.router_instance.navigate("", { trigger: true }); // (route back home)
       }});
 
-    ///////////////           
     }
   }
 });
 
     // Navigating using backbone...Defined in main.js = "appr" stands for "app router" = global variable in js by attaching to window "window.appr"
     // window.appr.navigate($(event.target).attr('href'), { trigger: true});
+
 
 
 

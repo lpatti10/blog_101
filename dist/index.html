@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="styles/main.css">
 
     <script src="scripts/vendor/modernizr.js"></script>
+
+    <!-- Parse Library -->
+    <script src="//www.parsecdn.com/js/parse-1.2.19.min.js"></script>
+
   </head>
   <body>
 
@@ -45,7 +49,8 @@
     </div>
 
   
-  
+    <div class="zombie_cont"></div>
+
 
 
     <div class="full_post">
@@ -57,8 +62,8 @@
     <script type="text/x-handlebars-template" id="post_feed">
         {{#each posts}}
             <li>
-                <div id="{{_id}}" class="delete"><span class="octicon octicon-x"></span></div>
-                <a href="#" id="{{_id}}" class="post_title">{{ title }}</a>
+                <div id="{{ objectId }}" class="delete"><span class="octicon octicon-x"></span></div>
+                <a href="#" id="{{ objectId }}" class="post_title">{{ title }}</a>
                 <p>{{ content }}</p>
                 <small>{{ author }}</small>
                 <small>{{ date }}</small>
@@ -73,7 +78,7 @@
         <div class="lamp_solo"><img src="images/icon_60666.svg" /></div>
 
         <li>
-            <h2 id="{{_id}}">{{ title }}</h2>
+            <h2 id="{{ objectId }}">{{ title }}</h2>
             <p class="full">{{ content }}</p>
             <div class="boiler">
                 <small class="full">{{ author }}</small>

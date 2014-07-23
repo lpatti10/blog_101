@@ -37,6 +37,11 @@ gulp.task('images', function () {
     })))
     .pipe(gulp.dest('dist/images'));
 });
+// Attempting to add fonts task 
+gulp.task('fonts', function () {
+  return gulp.src('app/fonts/**/*')
+    .pipe(gulp.dest('dist/fonts'));
+});
 
 gulp.task('extras', function () {
   return gulp.src(['app/*.*', '!app/*.html'], {dot: true})
@@ -101,7 +106,7 @@ gulp.task('watch', ['connect', 'serve'], function () {
   gulp.watch('bower.json', ['wiredep']);
 });
 
-gulp.task('build', ['html', 'images', 'extras'], function () {
+gulp.task('build', ['html', 'images', 'extras', 'fonts'], function () {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

@@ -2,9 +2,12 @@
 
 
 
-var Post = Backbone.Model.extend({
+var Post =  Parse.Object.extend({
 	
-  idAttribute: "_id" ,
+  // Class name (data base table) needed for Parse
+  className: 'BlogItem',
+
+  idAttribute: "objectId" ,
 
   defaults: {
     title: "", 

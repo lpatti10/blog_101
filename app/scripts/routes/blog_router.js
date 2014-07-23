@@ -13,27 +13,24 @@ var PostRouter = Backbone.Router.extend({
 		"post/:id": 'single_post'
 	},
 
-	// TIM'S ZOMBIE FIX
-	// initialize: function () {
-	// 	this.appView = new AppView();
-	// },
-
+	// ZOMBIE FIX 
+  initialize: function () {
+    this.appView = new AppView();
+  },
 
 	//HOME PAGE VIEW AS FEED/LIST
 	home: function () {
-		new ListView({ collection: all_posts });
-
-		// TIM'S ZOMBIE FIX
-		// this.appView.showView(listView);
+		var list_view = new ListView({ collection: all_posts });
+		// ZOMBIE FIX
+		this.appView.showView(list_view);
 	},
 
 	//NEW FULL POST VIEW
 	single_post: function (id) {
 		// alert("Loading Post " + id);
-		new SingleView({ postid: id, collection: all_posts });
-
-		// TIM'S ZOMBIE FIX
-		// this.appView.showView(editView);
+		var post_single_view = new SingleView({ postid: id, collection: all_posts });
+		// ZOMBIE FIX
+		this.appView.showView(post_single_view);
 	}
 
 });

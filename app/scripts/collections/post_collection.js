@@ -1,8 +1,8 @@
 
-var Feed = Backbone.Collection.extend({
+var Feed = Parse.Collection.extend({
 
     model: Post,
     // url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog"
-    url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog2/"
+    // url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog2"
     
 });
