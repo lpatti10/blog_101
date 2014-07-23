@@ -37,7 +37,8 @@ gulp.task('images', function () {
     })))
     .pipe(gulp.dest('dist/images'));
 });
-// Attempting to add fonts task 
+
+// Attempting to add fonts task. Also added to build steps in line 110.
 gulp.task('fonts', function () {
   return gulp.src('app/fonts/**/*')
     .pipe(gulp.dest('dist/fonts'));
