@@ -6,24 +6,28 @@ var PostRouter = Backbone.Router.extend({
 
 	// Defining my Routes
 	routes: {
-		//2 ROUTES: DEFAULT/HOME, POST "PAGE"
-		'': 'home',
-		//"posts is defining what URL & will appear in this route"
-		//Calling /:id allows us to pass it in to function below
-		"post/:id": 'single_post'
+		
+		'': 'home', //ListView
+		'post/:id': 'single_post', //SingleView
+		// 'user' : 'user_validate' //ValidationView
 	},
 
 	// ZOMBIE FIX : INSTANCE VARIABLE "ONLY EVER CREATING ONE"
   initialize: function () {
-    this.appView = new AppView();
+    this.appView = new App.View();
   },
 
 	//HOME PAGE VIEW AS FEED/LIST
 	home: function () {
-		var list_view = new ListView({ collection: all_posts });
+		// if(!App.currentUser) return App.router.navigate('user', {trigger: true});
+		
+		// showUser(App.currentUser);  ?????????????????????????????????????????????????????
+		// var list_view = new ListView({ collection: all_posts });
+		var list_view = new ListView();
+
 		// ZOMBIE FIX : CALLING METHOD OF SHOWVIEW ON INSTANCE OF APPVIEW
 		this.appView.showView(list_view);
-		//SEE TIM'S NEW UPDATED METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	},
 
 	//NEW FULL POST VIEW
@@ -32,7 +36,14 @@ var PostRouter = Backbone.Router.extend({
 		var post_single_view = new SingleView({ postid: id, collection: all_posts });
 		// ZOMBIE FIX
 		this.appView.showView(post_single_view);
-		//SEE TIM'S NEW UPDATED METHOD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	},
+
+	user_validate: function () {
+		if(App.currentUser) return App.router.navigate('', {trigger: true});
+		// New instance of Validation View
+		var val = new ValidationView();
+		this.appView.showView(val);
 	}
 
 });

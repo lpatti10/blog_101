@@ -2,9 +2,6 @@
 // I've decided this will also be my home page, but that is defined in my route
 var ListView = Backbone.View.extend({
 
-  // Parent element only (vs. jQ) where all events are happening. 
-  el: ".hero-unit",
-
   events: {
     
      "submit #formID": "submitForm",
@@ -13,12 +10,19 @@ var ListView = Backbone.View.extend({
   },
 
   //EXPERIMENTING with 'attrs' param and first line call...
-  initialize: function (attrs) {
-    this.options = attrs;
-    this.render(); // This will run the `render` function below
-    this.collection.on('change', this.render, this); // This watches my collection for when I add/update a post
-    this.collection.on('destroy', this.render, this); // This watches my collection for when I delete a post
-    this.collection.on('add', this.render, this); // 'Change' doesn't watch for 'adds'
+  initialize: function () {
+    var self = this;
+    App.all_posts = new Feed();
+    App.all_posts.query = new Parse.Query(Post);
+  
+    // this.options = attrs;
+    App.all_posts.query.equalTo('user', App.currentUser);
+    App.all_posts.on('change', this.render, this); // This watches my collection for when I add/update a post
+    App.all_posts.on('destroy', this.render, this); // This watches my collection for when I delete a post
+    App.all_posts.on('add', this.render, this); // 'Change' doesn't watch for 'adds'
+    App.all_posts.fetch().done( function () {
+      self.render(); // This will run the `render` function below
+    });
   }, 
   
 
@@ -26,8 +30,9 @@ var ListView = Backbone.View.extend({
   render: function(){
     //Pass data to template
     var template = Handlebars.compile($('#post_feed').html()); // Grabs my handlebars temlate from my index.html file.
-    var rendered = template({ posts: this.collection.toJSON() }); // Renders out a block of HTML to be used in my code
-    this.$el.find(".post_list ul").html(rendered);
+    var rendered = template({ posts: App.all_posts.toJSON() }); // Renders out a block of HTML to be used in my code
+    // this.$el.find(".post_list ul").html(rendered);
+    this.$el.html(rendered); 
 
     //EXPERIMENTAL WEDNESDAY TO ATTEMPT REPAIR OF BACK BUTTON
     $(".hero-unit").show();

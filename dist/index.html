@@ -15,11 +15,17 @@
 
     <script src="scripts/vendor/modernizr.js"></script>
 
-    <!-- Parse Library -->
+    <!-- Parse Library --> 
     <script src="//www.parsecdn.com/js/parse-1.2.19.min.js"></script>
-
+    <!-- NOTE: PARSE USES AN OLDER VERSION OF BACKBONE, BUT WE CAN STILL CALL CURRENT BELOW.-->
   </head>
   <body>
+
+    <a href="/#" class="home logged_in">HOME</a>
+
+    <a href="#" class="logout logged_in">LOG OUT</a>
+
+    <div class="profile logged_in"></div>
 
     <div class="hero-unit">
         <form id="formID">
@@ -48,10 +54,8 @@
         </form>
     </div>
 
-  
+
     <div class="zombie_cont"></div>
-
-
 
     <div class="full_post">
         <ul></ul>
@@ -89,6 +93,30 @@
        
     </script>
 
+<div class="validation_forms">
+
+    <!-- SIGN-UP + LOG-IN TEMPLATE -->
+    <script type='text/x-handlebars-template' id='val_template'>
+
+        <form id="signupForm">
+            <h1>Create a new <br><span class="commentary">(fake)</span> account.</h1>
+            <input id="signup_username" placeholder="Choose a username..." autofocus="">
+            <input input type="password" id="signup_password" placeholder="Choose a password..." autofocus="">
+            <input id="signupBtn" type="submit" value="Sign up">
+        </form>
+    </script>
+
+    <!-- SIGN-UP + LOG-IN TEMPLATE -->
+    <script type='text/x-handlebars-template' id='val_template'>
+        <form id="loginForm">
+            <h3>Login to your <span class="commentary">(also fake)</span> account.</h3>
+            <input id="login_username" placeholder="Username" autofocus="">
+            <input input type="password" id="login_password" placeholder="Password" autofocus="">
+            <input id="loginBtn" type="submit" value="Login">
+        </form>
+
+    </script>
+</div>
 <!--     <div class="zippo"><img src="images/icon_1426.svg" /></div>
  -->
 

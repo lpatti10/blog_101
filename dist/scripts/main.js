@@ -1,11 +1,17 @@
-// TIM'S VALIDATION HERE
-
-
-
 var Post =  Parse.Object.extend({
 	
-  // Class name (data base table) needed for Parse
+  // Class name (data base table) needed for Parse "what we will be saving to Parse database table."" (Could also be set up in view: give el a class name)
   className: 'BlogItem',
+
+  // If no input is entered, messages will display...
+  validate: function(attrs) {
+    if(!attrs.title){
+      return 'Please enter the name of a Sundays song.';
+    }
+    if(!attrs.content){
+      return 'Please enter a snippet of song lyrics.';
+    }
+  },
 
   idAttribute: "objectId" ,
 
@@ -16,12 +22,11 @@ var Post =  Parse.Object.extend({
     status: "", 
     author: "", 
     tags: []
-
   },
   
-  initialize: function (){
-  	console.log("A new post has been submitted!");
-  }
+  // initialize: function (){
+  // 	console.log("A new post has been submitted!");
+  // }
 
 });
 
@@ -32,12 +37,130 @@ var Feed = Parse.Collection.extend({
     // url: "http://tiy-atl-fe-server.herokuapp.com/collections/laura_blog2"
     
 });
+var ValidationView = Parse.View.extend ({	
+	// el: ".validation_forms",
+	events: {
+		"submit #signupForm" : "signUp",
+		"submit #loginForm" : "logIn",	
+	},
+
+	initialize: function() {
+		this.render();
+	},
+
+	////////////////////////////////////////////////////////////////
+
+	render: function() {
+		var template = Handlebars.compile($('#val_template').text());
+		var rendered = template();
+		$('.logged_in').hide();
+		this.$el.html(rendered);
+	},
+
+	signUp: function(event) {
+		event.preventDefault();
+		var user,
+			form = $(event.target),
+			user_name = form.find('#signup_username').val(),
+			user_password = form.find('#signup_password').val(),
+					// user_password2 = form.find('input[name="password2"]').val();
+					// Check for Password Match
+					// if (user_password !== user_password2) return alert('Passwords do not match!');
+
+		user = new Parse.User({
+			username: user_name,
+			password: user_password
+		});
+					
+	user.signUp(null, {
+	  success: function(user) {
+	    alert('Welcome ' + user.get('username') + '!');
+			App.currentUser = Parse.User.current();
+			App.router.navigate('', {trigger: true});
+			$('.logged_in').show();
+	  },
+	  error: function(user, error) {
+	    alert("Error: " + error.message);
+			form.trigger('reset');
+	  }
+	});
+
+},
+
+////////////////////////////////////////////////////////////////
+userLogin: function (event) {
+		event.preventDefault();
+		var form = $(event.target),
+				user_name = form.find('#login_username').val(),
+				user_password = form.find('#login_password').val();
+
+		Parse.User.logIn(user_name, user_password, {
+		  success: function(user) {
+		    alert('Welcome Back ' + user.get('username') + '!');
+				App.currentUser = Parse.User.current();
+				App.router.navigate('', {trigger: true});
+				$('.logged_in').show();
+		  },
+		  error: function(user, error) {
+		    alert("Error: " + error.message);
+				form.trigger('reset');
+		  }
+		});
+	}
+
+});
+// 	logIn: function(event) {
+// 		var self = this;
+// 		var username = this.$("#login_username").val();
+// 		var password = this.$("#login_password").val();
+
+
+// 		Parse.User.logIn(username, password, {
+
+// 			success: function(user) {
+// 	    	new UserView();
+// 	    	// FROM TODO EXAMPLE
+// 	    	self.undelegateEvents();
+// 	    	delete self;
+// 	  	},
+// 	  	error: function(user, error) {
+// 		    alert("Error: " + error.code + " " + error.message);
+//     	}
+//     });
+
+//       $(this).trigger('reset');
+
+//   },
+// });
+
+		// var username = this.$("#signup_username").val();
+		// var password = this.$("#signup_password").val();			
+		// user.set("username", "username")
+		// console.log('gotcha username');
+		// user.set("password", "password")
+		// console.log('gotcha password');	
+
+
+		// Parse.User.signUp(username, password, {
+
+		// 	success: function(user) {
+	 //    	new UserView();
+	 //    	// FROM TODO EXAMPLE
+	 //    	self.undelegateEvents();
+	 //    	delete self;
+	 //  	},
+	 //  	error: function(user, error) {
+		//     alert("Error: " + error.code + " " + error.message);
+  //     }
+  //   });
+
+  //     $(this).trigger('reset');
+
+  // },
+
 // This is a view of all of my blog posts
 // I've decided this will also be my home page, but that is defined in my route
 var ListView = Backbone.View.extend({
-
-  // Parent element only (vs. jQ) where all events are happening. 
-  el: ".hero-unit",
 
   events: {
     
@@ -47,12 +170,19 @@ var ListView = Backbone.View.extend({
   },
 
   //EXPERIMENTING with 'attrs' param and first line call...
-  initialize: function (attrs) {
-    this.options = attrs;
-    this.render(); // This will run the `render` function below
-    this.collection.on('change', this.render, this); // This watches my collection for when I add/update a post
-    this.collection.on('destroy', this.render, this); // This watches my collection for when I delete a post
-    this.collection.on('add', this.render, this); // 'Change' doesn't watch for 'adds'
+  initialize: function () {
+    var self = this;
+    App.all_posts = new Feed();
+    App.all_posts.query = new Parse.Query(Post);
+  
+    // this.options = attrs;
+    App.all_posts.query.equalTo('user', App.currentUser);
+    App.all_posts.on('change', this.render, this); // This watches my collection for when I add/update a post
+    App.all_posts.on('destroy', this.render, this); // This watches my collection for when I delete a post
+    App.all_posts.on('add', this.render, this); // 'Change' doesn't watch for 'adds'
+    App.all_posts.fetch().done( function () {
+      self.render(); // This will run the `render` function below
+    });
   }, 
   
 
@@ -60,9 +190,13 @@ var ListView = Backbone.View.extend({
   render: function(){
     //Pass data to template
     var template = Handlebars.compile($('#post_feed').html()); // Grabs my handlebars temlate from my index.html file.
-    var rendered = template({ posts: this.collection.toJSON() }); // Renders out a block of HTML to be used in my code
-    this.$el.find(".post_list ul").html(rendered);
-    
+    var rendered = template({ posts: App.all_posts.toJSON() }); // Renders out a block of HTML to be used in my code
+    // this.$el.find(".post_list ul").html(rendered);
+    this.$el.html(rendered); 
+
+    //EXPERIMENTAL WEDNESDAY TO ATTEMPT REPAIR OF BACK BUTTON
+    $(".hero-unit").show();
+
     //EXPERIMENTAL
     $(".full_post").hide();
     
@@ -228,23 +362,28 @@ var PostRouter = Backbone.Router.extend({
 
 	// Defining my Routes
 	routes: {
-		//2 ROUTES: DEFAULT/HOME, POST "PAGE"
-		'': 'home',
-		//"posts is defining what URL & will appear in this route"
-		//Calling /:id allows us to pass it in to function below
-		"post/:id": 'single_post'
+		
+		'': 'home', //ListView
+		'post/:id': 'single_post', //SingleView
+		// 'user' : 'user_validate' //ValidationView
 	},
 
-	// ZOMBIE FIX 
+	// ZOMBIE FIX : INSTANCE VARIABLE "ONLY EVER CREATING ONE"
   initialize: function () {
-    this.appView = new AppView();
+    this.appView = new App.View();
   },
 
 	//HOME PAGE VIEW AS FEED/LIST
 	home: function () {
-		var list_view = new ListView({ collection: all_posts });
-		// ZOMBIE FIX
+		// if(!App.currentUser) return App.router.navigate('user', {trigger: true});
+		
+		// showUser(App.currentUser);  ?????????????????????????????????????????????????????
+		// var list_view = new ListView({ collection: all_posts });
+		var list_view = new ListView();
+
+		// ZOMBIE FIX : CALLING METHOD OF SHOWVIEW ON INSTANCE OF APPVIEW
 		this.appView.showView(list_view);
+
 	},
 
 	//NEW FULL POST VIEW
@@ -253,71 +392,128 @@ var PostRouter = Backbone.Router.extend({
 		var post_single_view = new SingleView({ postid: id, collection: all_posts });
 		// ZOMBIE FIX
 		this.appView.showView(post_single_view);
+
+	},
+
+	user_validate: function () {
+		if(App.currentUser) return App.router.navigate('', {trigger: true});
+		// New instance of Validation View
+		var val = new ValidationView();
+		this.appView.showView(val);
 	}
 
 });
 // Initialize Parse
 Parse.initialize("EFaSOx8OMDQzadR62QT66Haedv7aTbjd70PaEDTU", "eIKnA5CTuTAmkv1DPi2AAWeVJC5dHyTJc9mPaoA2");
 
+//INITIALIZE APP
+var App = {};
 
-//Instance of collection
-var all_posts = new Feed();
+//CHECK FOR USER
+App.currentUser = Parse.User.current();
 
+//MANAGING APP VIEWS
+App.View = function (){
+  this.showView = function(view) {
+    if (this.currentView) {
+      this.currentView.remove();
+    }
+    this.currentView = view;
+    this.currentView.render();
+    $('.post_list ul').html(this.currentView.el);
+  }
+}
 
+//SCRIPT TO UPDATE USER FIELD
+// var showUser = function(user) {
+//   var name = user.get('username'); //???????????????????????????? .get of null ???????? 
+//   $('.profile').text(name);            
+// };
 
+//"FIRE UP" + START LISTENING
+App.router = new PostRouter();
+Backbone.history.start();
 
-// Grab all my data from my server
-// After it's complete, create a new view with data
-all_posts.fetch().done( function (){
-	//DEFINING POST ROUTER INSTANCE
-	window.router_instance = new PostRouter();
-	Backbone.history.start();
+// //CREATE A NEW POST  ???????????????????????????????
+// $('#formID').on('submit', function (event) {
+//   event.preventDefault();
+  
+//   //NEW INSTANCE OF POST MODEL??????????????????????
+//   var temp_post = new Post();
+
+//   //SET PROPERTIES  ???????????????????????????????????
+//   var validate = temp_post.set({
+//     title:  $("#title").val(),
+//     content: $("#content").val(),
+//     author:  $("#author").val(),
+//     tags: $("#tags").val(),
+//     // tags: tags.replace(/\s+/g, '').split(','),
+//     status: "Published",
+//     date: new Date().toJSON().slice(0,10),    
+//     user: App.currentUser
+//   }, {validate: true});
+
+//   // SAVE POST
+//   if(validate !== false) {
+//     temp_post.setACL(new Parse.ACL(Parse.User.current()));
+//     temp_post.save(null, {
+//       success: function(temp_post) {
+//         // Adds to my collection
+//         App.all_posts.add(temp_post);
+//         // Resets my form - skadoosh
+//         $(this).trigger('reset');
+//       }
+//     });
+//   } else {
+//     alert('You must fill out all fields!');
+//   }
+
+// });
+
+//LOGOUT ??????????????????????????????????????????
+$('.logout').on('click', function () {      
+console.log("clicked")
+
+  Parse.User.logout();
+  App.currentUser = Parse.User.current();
+  App.router.navigate('user', {trigger: true});
 });
 
 
-// ZOMBIE FIX 
-var AppView = function (){
 
-  this.showView = function(view) {
-    if (this.currentView){
-      this.currentView.remove();
-    }
 
-    this.currentView = view;
-    this.currentView.render();
-
-    $(".zombie_cont").html(this.currentView.el);
-  }
-
-}
+//????????????????????????????????????????????????????????????
 
 
 
-//TIM'S ZOMBIE FIX
+
+// // Grab all my data from my server
+// // After it's complete, create a new view with data
+// all_posts.fetch().done( function (){
+// 	//DEFINING POST ROUTER INSTANCE
+// 	window.router_instance = new PostRouter();
+// 	Backbone.history.start();
+// });
+
+
+// // ZOMBIE FIX 
 // var AppView = function (){
 
+// // IS CURRENT VIEW AVAILABLE??
 //   this.showView = function(view) {
 //     if (this.currentView){
+//       // IF THERE'S A CURRENT VIEW, REMOVE IT
 //       this.currentView.remove();
 //     }
 
 //     this.currentView = view;
 //     this.currentView.render();
 
-//     $(".whiskey_cont").html(this.currentView.el);
+//     $(".zombie_cont").html(this.currentView.el);
 //   }
 
 // }
 
-
-
-
-//THIS IS HOME BUTTON .NAVIGATE ON CLICK FUNCTION AS GLOBAL NAV.
-
-// $('header a').on('click', function (e) {
-//  e.preventDefault();
-//  window.appr.navigate("", {trigger: true});
-// });
 
 
 
